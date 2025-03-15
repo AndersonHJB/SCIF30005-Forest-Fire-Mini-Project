@@ -65,6 +65,19 @@ void generateRandomGrid(std::vector<int> &grid, int N, double p, unsigned int se
     }
 }
 
+void igniteTopRow(std::vector<int> &grid, int N) {
+    for (int j = 0; j < N; j++) {
+        if (grid[j] == TREE) {
+            grid[j] = BURNING;
+        }
+    }
+}
+
+SimulationResult runSimulationParallel(const std::vector<int> &initialGrid, int N,
+                                       MPI_Comm comm) {
+
+}
+
 int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
     int rank, size;
