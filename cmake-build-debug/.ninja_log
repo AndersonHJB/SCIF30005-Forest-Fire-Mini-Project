@@ -1,0 +1,6 @@
+# ninja log v6
+0	431	1742043716667766503	build.ninja	1c36bf5f20fe2ccd
+4	47	1742023377921379094	CMakeFiles/untitled12.dir/forest_fire_mpi.cpp.o	1e0780dadea0ad21
+47	85	1742023377964610011	untitled12	d5c8af5acd4767f4
+1	183	1742043838217788488	CMakeFiles/untitled12.dir/forest_fire_mpi.cpp.o	1e0780dadea0ad21
+183	290	1742043838399268972	untitled12	d5c8af5acd4767f4
