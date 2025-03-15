@@ -41,8 +41,41 @@ bool readGridFromFile(const std::string &filename, std::vector<int> &grid, int N
     if (!fin.is_open()) {
         return false;
     }
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            int val;
+            fin >> val;
+            grid[i * N + j]  = val;
+        }
+    }
+    fin.close();
+    return false;
+}
+
+void generateRandomGrid(std::vector<int> &grid, int N, double p, unsigned int seed) {
+    std::mt19937 gen(seed);
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
+    for (int i = 0; i < N*N; i++) {
+        double r = dist(gen);
+        if (r < p) {
+            grid[i] = TREE;
+        } else {
+            grid[i] = EMPTY;
+        }
+    }
+}
+
+int main(int argc, char* argv[]) {
+    MPI_Init(&argc, &argv);
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
 
 }
+
+
+
+
 
 
 
