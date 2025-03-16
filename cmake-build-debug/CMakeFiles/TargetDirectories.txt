@@ -1,3 +1,3 @@
-/Users/huangjiabao/CLionProjects/untitled12/cmake-build-debug/CMakeFiles/untitled12.dir
-/Users/huangjiabao/CLionProjects/untitled12/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/huangjiabao/CLionProjects/untitled12/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/untitled12.dir
+/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/rebuild_cache.dir

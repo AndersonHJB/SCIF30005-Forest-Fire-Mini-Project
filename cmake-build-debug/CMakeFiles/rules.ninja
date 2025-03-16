@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/huangjiabao/CLionProjects/untitled12 -B/Users/huangjiabao/CLionProjects/untitled12/cmake-build-debug
+  command = /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project -B/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug
   description = Re-running CMake...
   generator = 1
 
