@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Compile the code
+make
+
+# Run convergence study
+echo "Running convergence study..."
+mpirun -np 4 ./forest_fire 3 > convergence_results.csv
+
+# Run performance analysis with different process counts
+echo "Running performance analysis..."
+for procs in 1 2 4 8 16
+do
+    mpirun -np $procs ./forest_fire 4 >> performance_results.csv
+done
+
+echo "All tests completed."

@@ -1,0 +1,9 @@
+CXX = mpicxx
+CXXFLAGS = -std=c++11 -O3 -Wall
+TARGET = forest_fire
+
+$(TARGET): forest_fire.cpp
+	$(CXX) $(CXXFLAGS) -o $(TARGET) forest_fire.cpp
+
+clean:
+	rm -f $(TARGET)
