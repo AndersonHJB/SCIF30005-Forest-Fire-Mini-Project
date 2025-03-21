@@ -10,7 +10,8 @@ include_directories(${MPI_INCLUDE_PATH})
 link_directories(${MPI_LIBRARY_PATH})
 
 # 添加可执行文件
-add_executable(untitled12 forest_fire_mpi.cpp)
+add_executable(untitled12 forest_fire_mpi.cpp
+)
 
 # 链接 MPI
 target_link_libraries(untitled12 ${MPI_CXX_LIBRARIES})

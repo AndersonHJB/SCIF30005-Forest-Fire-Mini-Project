@@ -37,7 +37,7 @@ int nextState(int currentState, int up, int down, int left, int right) {
 }
 
 bool readGridFromFile(const std::string &filename, std::vector<int> &grid, int N) {
-    std::ifstream  fin(filename.c_str());
+    std::ifstream fin(filename.c_str());
     if (!fin.is_open()) {
         return false;
     }
@@ -45,7 +45,7 @@ bool readGridFromFile(const std::string &filename, std::vector<int> &grid, int N
         for (int j = 0; j < N; j++) {
             int val;
             fin >> val;
-            grid[i * N + j]  = val;
+            grid[i * N + j] = val;
         }
     }
     fin.close();
@@ -55,7 +55,7 @@ bool readGridFromFile(const std::string &filename, std::vector<int> &grid, int N
 void generateRandomGrid(std::vector<int> &grid, int N, double p, unsigned int seed) {
     std::mt19937 gen(seed);
     std::uniform_real_distribution<double> dist(0.0, 1.0);
-    for (int i = 0; i < N*N; i++) {
+    for (int i = 0; i < N * N; i++) {
         double r = dist(gen);
         if (r < p) {
             grid[i] = TREE;
@@ -73,12 +73,14 @@ void igniteTopRow(std::vector<int> &grid, int N) {
     }
 }
 
-SimulationResult runSimulationParallel(const std::vector<int> &initialGrid, int N,
-                                       MPI_Comm comm) {
+SimulationResult runSimulationParallel(const std::vector<int> &initialGrid, int N, MPI_Comm comm) {
+    int rank, size;
+    MPI_Comm_rank(comm, &rank);
+    MPI_Comm_size(comm, &size);
 
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     MPI_Init(&argc, &argv);
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
