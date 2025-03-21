@@ -7,43 +7,44 @@
 #include <chrono>
 #include <cmath>
 
+// 定义单元格状态
 enum CellState {
-    EMPTY = 0,
-    TREE = 1,
-    BURNING = 2,
-    DEAD = 3
+    EMPTY = 0,   // 空单元格
+    TREE = 1,    // 活树
+    BURNING = 2, // 燃烧的树
+    DEAD = 3     // 死树
 };
 
 class ForestFire {
 private:
-    int N;                       // Grid size
-    double p;                    // Probability of tree
-    int rank;                    // MPI rank
-    int num_procs;               // Number of MPI processes
-    int local_rows;              // Number of rows handled by this process
-    int global_start_row;        // Starting row in global grid
+    int N;                       // 网格大小
+    double p;                    // 树木生成概率
+    int rank;                    // MPI进程编号
+    int num_procs;               // MPI进程总数
+    int local_rows;              // 当前进程处理的行数
+    int global_start_row;        // 当前进程在全局网格中的起始行
 
-    std::vector<std::vector<int>> grid;        // Current state
-    std::vector<std::vector<int>> next_grid;   // Next state
-    std::mt19937 rng;                          // Random number generator
+    std::vector<std::vector<int>> grid;        // 当前状态
+    std::vector<std::vector<int>> next_grid;   // 下一步状态
+    std::mt19937 rng;                          // 随机数生成器
 
-    // MPI communication buffers
-    std::vector<int> send_top;   // Buffer to send to process above
-    std::vector<int> send_bottom;// Buffer to send to process below
-    std::vector<int> recv_top;   // Buffer to receive from process above
-    std::vector<int> recv_bottom;// Buffer to receive from process below
+    // MPI通信缓冲区
+    std::vector<int> send_top;   // 发送到上方进程的缓冲区
+    std::vector<int> send_bottom;// 发送到下方进程的缓冲区
+    std::vector<int> recv_top;   // 从上方进程接收的缓冲区
+    std::vector<int> recv_bottom;// 从下方进程接收的缓冲区
 
 public:
     ForestFire(int N, double p, int seed, int rank, int num_procs)
         : N(N), p(p), rank(rank), num_procs(num_procs), rng(seed + rank) {
 
-        // Calculate number of rows per process
+        // 计算每个进程处理的行数
         local_rows = N / num_procs;
         if (rank < N % num_procs) {
             local_rows++;
         }
 
-        // Calculate global starting row for this process
+        // 计算当前进程在全局网格中的起始行
         global_start_row = 0;
         for (int i = 0; i < rank; i++) {
             global_start_row += N / num_procs;
@@ -52,22 +53,22 @@ public:
             }
         }
 
-        // Initialize grid with extra rows for ghost cells
+        // 初始化网格，包括额外的幽灵单元格行
         grid.resize(local_rows + 2, std::vector<int>(N, EMPTY));
         next_grid.resize(local_rows + 2, std::vector<int>(N, EMPTY));
 
-        // Initialize communication buffers
+        // 初始化通信缓冲区
         send_top.resize(N, EMPTY);
         send_bottom.resize(N, EMPTY);
         recv_top.resize(N, EMPTY);
         recv_bottom.resize(N, EMPTY);
     }
 
-    // Generate a random grid
+    // 生成随机网格
     void generateRandomGrid() {
         std::uniform_real_distribution<double> dist(0.0, 1.0);
 
-        // Fill the grid with trees based on probability p
+        // 根据概率p填充网格
         for (int i = 1; i <= local_rows; i++) {
             for (int j = 0; j < N; j++) {
                 if (dist(rng) < p) {
@@ -78,7 +79,7 @@ public:
             }
         }
 
-        // Set fire to the top row if this process has it
+        // 如果当前进程负责第一行，则点燃上面一行的树
         if (global_start_row == 0) {
             for (int j = 0; j < N; j++) {
                 if (grid[1][j] == TREE) {
@@ -88,18 +89,18 @@ public:
         }
     }
 
-    // Read grid from file (only master process reads, then distributes)
+    // 从文件读取网格（仅主进程读取，然后分发）
     void readGridFromFile(const std::string& filename) {
         std::vector<std::vector<int>> full_grid;
 
         if (rank == 0) {
             std::ifstream file(filename);
             if (!file.is_open()) {
-                std::cerr << "Error opening file: " << filename << std::endl;
+                std::cerr << "打开文件出错: " << filename << std::endl;
                 MPI_Abort(MPI_COMM_WORLD, 1);
             }
 
-            // Read the full grid
+            // 读取完整网格
             std::string line;
             while (std::getline(file, line)) {
                 std::vector<int> row;
@@ -114,26 +115,26 @@ public:
             }
             file.close();
 
-            // Check if the grid is square
+            // 检查网格是否为正方形
             N = full_grid.size();
             for (const auto& row : full_grid) {
                 if (row.size() != N) {
-                    std::cerr << "Error: Grid is not square" << std::endl;
+                    std::cerr << "错误: 网格不是正方形" << std::endl;
                     MPI_Abort(MPI_COMM_WORLD, 1);
                 }
             }
         }
 
-        // Broadcast N to all processes
+        // 向所有进程广播N
         MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-        // Recalculate rows per process
+        // 重新计算每个进程处理的行数
         local_rows = N / num_procs;
         if (rank < N % num_procs) {
             local_rows++;
         }
 
-        // Recalculate global starting row
+        // 重新计算全局起始行
         global_start_row = 0;
         for (int i = 0; i < rank; i++) {
             global_start_row += N / num_procs;
@@ -142,7 +143,7 @@ public:
             }
         }
 
-        // Resize grids and buffers
+        // 调整网格和缓冲区大小
         grid.resize(local_rows + 2, std::vector<int>(N, EMPTY));
         next_grid.resize(local_rows + 2, std::vector<int>(N, EMPTY));
         send_top.resize(N, EMPTY);
@@ -150,16 +151,16 @@ public:
         recv_top.resize(N, EMPTY);
         recv_bottom.resize(N, EMPTY);
 
-        // Distribute grid to processes
+        // 分发网格到各进程
         if (rank == 0) {
-            // Master keeps its own part
+            // 主进程保留自己的部分
             for (int i = 0; i < local_rows; i++) {
                 for (int j = 0; j < N; j++) {
                     grid[i+1][j] = full_grid[i][j];
                 }
             }
 
-            // Send parts to other processes
+            // 发送部分到其他进程
             int current_row = local_rows;
             for (int dest = 1; dest < num_procs; dest++) {
                 int dest_rows = N / num_procs;
@@ -173,13 +174,13 @@ public:
                 current_row += dest_rows;
             }
         } else {
-            // Receive grid part from master
+            // 从主进程接收网格部分
             for (int i = 0; i < local_rows; i++) {
                 MPI_Recv(grid[i+1].data(), N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             }
         }
 
-        // Set fire to the top row if this process has it
+        // 如果当前进程负责第一行，则点燃上面一行的树
         if (global_start_row == 0) {
             for (int j = 0; j < N; j++) {
                 if (grid[1][j] == TREE) {
@@ -189,34 +190,34 @@ public:
         }
     }
 
-    // Exchange ghost cells with neighboring processes
+    // 与相邻进程交换边界单元格
     void exchangeBoundaries() {
         MPI_Request requests[4];
         MPI_Status statuses[4];
         int req_count = 0;
 
-        // Prepare data to send
+        // 准备要发送的数据
         for (int j = 0; j < N; j++) {
             send_top[j] = grid[1][j];
             send_bottom[j] = grid[local_rows][j];
         }
 
-        // Send/Receive top boundary
+        // 发送/接收上边界
         if (rank > 0) {
             MPI_Isend(send_top.data(), N, MPI_INT, rank-1, 0, MPI_COMM_WORLD, &requests[req_count++]);
             MPI_Irecv(recv_top.data(), N, MPI_INT, rank-1, 1, MPI_COMM_WORLD, &requests[req_count++]);
         }
 
-        // Send/Receive bottom boundary
+        // 发送/接收下边界
         if (rank < num_procs - 1) {
             MPI_Isend(send_bottom.data(), N, MPI_INT, rank+1, 1, MPI_COMM_WORLD, &requests[req_count++]);
             MPI_Irecv(recv_bottom.data(), N, MPI_INT, rank+1, 0, MPI_COMM_WORLD, &requests[req_count++]);
         }
 
-        // Wait for all communications to complete
+        // 等待所有通信完成
         MPI_Waitall(req_count, requests, statuses);
 
-        // Update ghost cells
+        // 更新幽灵单元格
         if (rank > 0) {
             for (int j = 0; j < N; j++) {
                 grid[0][j] = recv_top[j];
@@ -230,14 +231,14 @@ public:
         }
     }
 
-    // Run a single time step of the simulation
+    // 运行模拟的单个时间步
     bool step() {
         bool still_burning = false;
 
-        // Exchange boundaries before the step
+        // 在步骤之前交换边界
         exchangeBoundaries();
 
-        // Apply rules to each cell
+        // 对每个单元格应用规则
         for (int i = 1; i <= local_rows; i++) {
             for (int j = 0; j < N; j++) {
                 switch (grid[i][j]) {
@@ -245,7 +246,7 @@ public:
                         next_grid[i][j] = EMPTY;
                         break;
                     case TREE:
-                        // Check if any neighbors are burning
+                        // 检查是否有邻居在燃烧
                         bool neighbor_burning = false;
                         if (i > 0 && grid[i-1][j] == BURNING) neighbor_burning = true;
                         if (i < local_rows+1 && grid[i+1][j] == BURNING) neighbor_burning = true;
@@ -269,21 +270,21 @@ public:
             }
         }
 
-        // Swap grids
+        // 交换网格
         std::swap(grid, next_grid);
 
-        // Check if any process still has burning trees
+        // 检查是否还有进程有燃烧的树
         int global_still_burning = 0;
         MPI_Allreduce(&still_burning, &global_still_burning, 1, MPI_INT, MPI_LOR, MPI_COMM_WORLD);
 
         return global_still_burning;
     }
 
-    // Check if fire reached the bottom row
+    // 检查火是否到达底部
     bool fireReachedBottom() {
         bool local_reached_bottom = false;
 
-        // If this process has the bottom row
+        // 如果此进程拥有底部行
         if (global_start_row + local_rows == N) {
             for (int j = 0; j < N; j++) {
                 if (grid[local_rows][j] == BURNING || grid[local_rows][j] == DEAD) {
@@ -293,29 +294,29 @@ public:
             }
         }
 
-        // Check across all processes
+        // 检查所有进程
         int global_reached_bottom = 0;
         MPI_Allreduce(&local_reached_bottom, &global_reached_bottom, 1, MPI_INT, MPI_LOR, MPI_COMM_WORLD);
 
         return global_reached_bottom;
     }
 
-    // Print the grid (for debugging)
+    // 打印网格（用于调试）
     void printGrid() {
         std::vector<std::vector<int>> full_grid;
 
-        // Gather all parts to the master process
+        // 将所有部分收集到主进程
         if (rank == 0) {
             full_grid.resize(N, std::vector<int>(N, EMPTY));
 
-            // Copy master's part
+            // 复制主进程的部分
             for (int i = 0; i < local_rows; i++) {
                 for (int j = 0; j < N; j++) {
                     full_grid[i][j] = grid[i+1][j];
                 }
             }
 
-            // Receive parts from other processes
+            // 接收其他进程的部分
             int current_row = local_rows;
             for (int src = 1; src < num_procs; src++) {
                 int src_rows = N / num_procs;
@@ -333,8 +334,8 @@ public:
                 current_row += src_rows;
             }
 
-            // Print the grid
-            std::cout << "Grid:" << std::endl;
+            // 打印网格
+            std::cout << "网格:" << std::endl;
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
                     char c;
@@ -350,7 +351,7 @@ public:
                 std::cout << std::endl;
             }
         } else {
-            // Send grid part to master
+            // 将网格部分发送给主进程
             for (int i = 0; i < local_rows; i++) {
                 MPI_Send(grid[i+1].data(), N, MPI_INT, 0, 0, MPI_COMM_WORLD);
             }
@@ -358,20 +359,20 @@ public:
     }
 };
 
-// Run a single simulation
+// 运行单次模拟
 void runSimulation(int N, double p, int seed, int& steps, bool& reached_bottom, double& elapsed_time) {
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    // Start timer
+    // 开始计时
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    // Initialize forest
+    // 初始化森林
     ForestFire forest(N, p, seed, rank, size);
     forest.generateRandomGrid();
 
-    // Run simulation until no more trees are burning
+    // 运行模拟直到没有树燃烧
     steps = 0;
     bool still_burning = true;
     while (still_burning) {
@@ -379,15 +380,15 @@ void runSimulation(int N, double p, int seed, int& steps, bool& reached_bottom, 
         steps++;
     }
 
-    // Check if fire reached bottom
+    // 检查火是否到达底部
     reached_bottom = forest.fireReachedBottom();
 
-    // Stop timer
+    // 停止计时
     auto end_time = std::chrono::high_resolution_clock::now();
     elapsed_time = std::chrono::duration<double>(end_time - start_time).count();
 }
 
-// Run multiple simulations and average results
+// 运行多次模拟并平均结果
 void runMultipleSimulations(int N, double p, int M, double& avg_steps, double& fire_reached_bottom_ratio, double& avg_time) {
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -397,13 +398,13 @@ void runMultipleSimulations(int N, double p, int M, double& avg_steps, double& f
     int total_reached_bottom = 0;
     double total_time = 0.0;
 
-    // Each process performs simulations
+    // 每个进程执行模拟
     for (int i = 0; i < M; i++) {
         int steps;
         bool reached_bottom;
         double elapsed_time;
 
-        // Use a different seed for each run
+        // 为每次运行使用不同的种子
         int seed = i * size + rank;
         runSimulation(N, p, seed, steps, reached_bottom, elapsed_time);
 
@@ -412,14 +413,14 @@ void runMultipleSimulations(int N, double p, int M, double& avg_steps, double& f
         total_time += elapsed_time;
     }
 
-    // Gather results
+    // 收集结果
     int global_total_steps, global_total_reached_bottom;
     double global_total_time;
     MPI_Reduce(&total_steps, &global_total_steps, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&total_reached_bottom, &global_total_reached_bottom, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&total_time, &global_total_time, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-    // Calculate averages
+    // 计算平均值
     if (rank == 0) {
         avg_steps = static_cast<double>(global_total_steps) / (M * size);
         fire_reached_bottom_ratio = static_cast<double>(global_total_reached_bottom) / (M * size);
@@ -427,14 +428,14 @@ void runMultipleSimulations(int N, double p, int M, double& avg_steps, double& f
     }
 }
 
-// Run convergence study for different probabilities and M values
+// 对不同概率和M值运行收敛研究
 void runConvergenceStudy(int N, const std::vector<double>& p_values, const std::vector<int>& M_values) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     if (rank == 0) {
-        std::cout << "Convergence Study (N = " << N << ")" << std::endl;
-        std::cout << "p,M,Avg_Steps,Fire_Reached_Bottom,Avg_Time" << std::endl;
+        std::cout << "收敛性研究 (N = " << N << ")" << std::endl;
+        std::cout << "p,M,平均步数,火到达底部,平均时间" << std::endl;
     }
 
     for (double p : p_values) {
@@ -450,26 +451,26 @@ void runConvergenceStudy(int N, const std::vector<double>& p_values, const std::
     }
 }
 
-// Run performance analysis for different grid sizes
+// 对不同网格大小运行性能分析
 void runPerformanceAnalysis(const std::vector<int>& N_values, double p, int M) {
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     if (rank == 0) {
-        std::cout << "Performance Analysis (p = " << p << ", M = " << M << ")" << std::endl;
-        std::cout << "N,Processes,Avg_Steps,Fire_Reached_Bottom,Avg_Time,Speedup" << std::endl;
+        std::cout << "性能分析 (p = " << p << ", M = " << M << ")" << std::endl;
+        std::cout << "N,进程数,平均步数,火到达底部,平均时间,加速比" << std::endl;
     }
 
     for (int N : N_values) {
         double avg_steps, fire_reached_bottom_ratio, avg_time;
         runMultipleSimulations(N, p, M, avg_steps, fire_reached_bottom_ratio, avg_time);
 
-        // Calculate reference time (for speedup calculation)
+        // 计算参考时间（用于加速比计算）
         double ref_time = 0.0;
         if (size > 1) {
             MPI_Bcast(&avg_time, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-            ref_time = avg_time * size;  // Approximation of sequential time
+            ref_time = avg_time * size;  // 顺序时间的近似值
         } else {
             ref_time = avg_time;
         }
@@ -489,14 +490,14 @@ int main(int argc, char* argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    // Check command line arguments
+    // 检查命令行参数
     if (argc < 2 && rank == 0) {
-        std::cout << "Usage: " << argv[0] << " [mode] [parameters]" << std::endl;
-        std::cout << "Modes:" << std::endl;
-        std::cout << "  1: Run single simulation (N p [file])" << std::endl;
-        std::cout << "  2: Run multiple simulations (N p M)" << std::endl;
-        std::cout << "  3: Run convergence study" << std::endl;
-        std::cout << "  4: Run performance analysis" << std::endl;
+        std::cout << "用法: " << argv[0] << " [模式] [参数]" << std::endl;
+        std::cout << "模式:" << std::endl;
+        std::cout << "  1: 运行单次模拟 (N p [文件])" << std::endl;
+        std::cout << "  2: 运行多次模拟 (N p M)" << std::endl;
+        std::cout << "  3: 运行收敛性研究" << std::endl;
+        std::cout << "  4: 运行性能分析" << std::endl;
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
 
@@ -506,9 +507,9 @@ int main(int argc, char* argv[]) {
     }
 
     switch (mode) {
-        case 1: {  // Single simulation
+        case 1: {  // 单次模拟
             if (argc < 4 && rank == 0) {
-                std::cout << "Usage: " << argv[0] << " 1 N p [file]" << std::endl;
+                std::cout << "用法: " << argv[0] << " 1 N p [文件]" << std::endl;
                 MPI_Abort(MPI_COMM_WORLD, 1);
             }
 
@@ -518,14 +519,14 @@ int main(int argc, char* argv[]) {
             ForestFire forest(N, p, 42, rank, size);
 
             if (argc >= 5) {
-                // Read grid from file
+                // 从文件读取网格
                 forest.readGridFromFile(argv[4]);
             } else {
-                // Generate random grid
+                // 生成随机网格
                 forest.generateRandomGrid();
             }
 
-            // Run simulation until no more trees are burning
+            // 运行模拟直到没有树燃烧
             int steps = 0;
             bool still_burning = true;
 
@@ -539,21 +540,21 @@ int main(int argc, char* argv[]) {
             auto end_time = std::chrono::high_resolution_clock::now();
             double elapsed_time = std::chrono::duration<double>(end_time - start_time).count();
 
-            // Check if fire reached bottom
+            // 检查火是否到达底部
             bool reached_bottom = forest.fireReachedBottom();
 
             if (rank == 0) {
-                std::cout << "Simulation completed in " << steps << " steps" << std::endl;
-                std::cout << "Fire reached bottom: " << (reached_bottom ? "Yes" : "No") << std::endl;
-                std::cout << "Time taken: " << elapsed_time << " seconds" << std::endl;
+                std::cout << "模拟在 " << steps << " 步内完成" << std::endl;
+                std::cout << "火是否到达底部: " << (reached_bottom ? "是" : "否") << std::endl;
+                std::cout << "耗时: " << elapsed_time << " 秒" << std::endl;
             }
 
             break;
         }
 
-        case 2: {  // Multiple simulations
+        case 2: {  // 多次模拟
             if (argc < 5 && rank == 0) {
-                std::cout << "Usage: " << argv[0] << " 2 N p M" << std::endl;
+                std::cout << "用法: " << argv[0] << " 2 N p M" << std::endl;
                 MPI_Abort(MPI_COMM_WORLD, 1);
             }
 
@@ -565,24 +566,24 @@ int main(int argc, char* argv[]) {
             runMultipleSimulations(N, p, M, avg_steps, fire_reached_bottom_ratio, avg_time);
 
             if (rank == 0) {
-                std::cout << "Average steps: " << avg_steps << std::endl;
-                std::cout << "Fire reached bottom ratio: " << fire_reached_bottom_ratio << std::endl;
-                std::cout << "Average time: " << avg_time << " seconds" << std::endl;
+                std::cout << "平均步数: " << avg_steps << std::endl;
+                std::cout << "火到达底部比率: " << fire_reached_bottom_ratio << std::endl;
+                std::cout << "平均时间: " << avg_time << " 秒" << std::endl;
             }
 
             break;
         }
 
-        case 3: {  // Convergence study
+        case 3: {  // 收敛性研究
             std::vector<double> p_values = {0.3, 0.4, 0.5, 0.55, 0.6, 0.65, 0.7};
             std::vector<int> M_values = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-            int N = 100;  // Fixed grid size
+            int N = 100;  // 固定网格大小
 
             runConvergenceStudy(N, p_values, M_values);
             break;
         }
 
-        case 4: {  // Performance analysis
+        case 4: {  // 性能分析
             std::vector<int> N_values = {50, 100, 500};
             double p = 0.6;
             int M = 50;
@@ -593,7 +594,7 @@ int main(int argc, char* argv[]) {
 
         default:
             if (rank == 0) {
-                std::cout << "Invalid mode: " << mode << std::endl;
+                std::cout << "无效模式: " << mode << std::endl;
             }
             MPI_Abort(MPI_COMM_WORLD, 1);
     }
