@@ -1,0 +1,141 @@
+下面是针对上面代码和题目的所有任务测试命令，以及每个命令的格式和参数说明：
+
+## 命令格式总览
+
+程序的基本命令格式是：
+```
+mpirun -np <进程数> ./forest_fire <模式> [参数...]
+```
+
+其中：
+- `-np <进程数>`: 指定要使用的MPI进程数量
+- `<模式>`: 运行模式 (1-4)
+- `[参数...]`: 根据不同模式需要的特定参数
+
+## 具体命令及参数说明
+
+### 1. 单次模拟 (模式 1)
+
+```
+mpirun -np <进程数> ./forest_fire 1 <N> <p> [文件名]
+```
+
+参数说明：
+- `1`: 模式1，表示单次模拟
+- `<N>`: 网格大小 (NxN)
+- `<p>`: 树木生成概率 (0.0-1.0)
+- `[文件名]`: 可选参数，指定初始网格的文件路径
+
+例子：
+```
+mpirun -np 4 ./forest_fire 1 100 0.6
+```
+这个命令使用4个MPI进程运行单次模拟，网格大小为100x100，树木生成概率为0.6。
+
+```
+mpirun -np 4 ./forest_fire 1 6 0.6 input_grid.txt
+```
+这个命令使用4个MPI进程运行单次模拟，网格大小为6x6，从input_grid.txt读取初始网格。
+
+### 2. 多次模拟 (模式 2)
+
+```
+mpirun -np <进程数> ./forest_fire 2 <N> <p> <M>
+```
+
+参数说明：
+- `2`: 模式2，表示多次模拟并平均结果
+- `<N>`: 网格大小 (NxN)
+- `<p>`: 树木生成概率 (0.0-1.0)
+- `<M>`: 重复运行次数
+
+例子：
+```
+mpirun -np 4 ./forest_fire 2 100 0.6 50
+```
+这个命令使用4个MPI进程运行50次模拟并平均结果，网格大小为100x100，树木生成概率为0.6。
+
+### 3. 收敛性研究 (模式 3)
+
+```
+mpirun -np <进程数> ./forest_fire 3 > convergence_results.csv
+```
+
+参数说明：
+- `3`: 模式3，表示进行收敛性研究
+- `> convergence_results.csv`: 将结果重定向到CSV文件
+
+这个命令没有额外参数，因为在程序中已经硬编码了测试的p值和M值。根据代码中的设置，它将测试以下参数：
+- p值: 0.3, 0.4, 0.5, 0.55, 0.6, 0.65, 0.7
+- M值: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+- 固定网格大小N=100
+
+例子：
+```
+mpirun -np 4 ./forest_fire 3 > convergence_results.csv
+```
+这个命令使用4个MPI进程运行收敛性研究，将结果保存到convergence_results.csv文件中。
+
+### 4. 性能分析 (模式 4)
+
+```
+mpirun -np <进程数> ./forest_fire 4 > performance_results.csv
+```
+
+参数说明：
+- `4`: 模式4，表示进行性能分析
+- `> performance_results.csv`: 将结果重定向到CSV文件
+
+这个命令也没有额外参数，因为在程序中已经硬编码了测试的N值、p值和M值。根据代码中的设置，它将测试以下参数：
+- N值: 50, 100, 500
+- 固定p=0.6
+- 固定M=50
+
+例子：
+```
+mpirun -np 4 ./forest_fire 4 > performance_results.csv
+```
+这个命令使用4个MPI进程运行性能分析，将结果保存到performance_results.csv文件中。
+
+## 性能分析命令组合
+
+为了完整进行性能分析，您需要使用不同的进程数运行模式4：
+
+```
+mpirun -np 1 ./forest_fire 4 > performance_np1.csv
+mpirun -np 2 ./forest_fire 4 > performance_np2.csv
+mpirun -np 4 ./forest_fire 4 > performance_np4.csv
+mpirun -np 8 ./forest_fire 4 > performance_np8.csv
+mpirun -np 16 ./forest_fire 4 > performance_np16.csv
+```
+
+或者使用下面的bash脚本一次性运行所有测试：
+
+```bash
+#!/bin/bash
+
+# 编译代码
+make
+
+# 运行收敛性研究
+echo "运行收敛性研究..."
+mpirun -np 4 ./forest_fire 3 > convergence_results.csv
+
+# 使用不同进程数运行性能分析
+echo "运行性能分析..."
+for procs in 1 2 4 8 16
+do
+    echo "使用 $procs 个进程..."
+    mpirun -np $procs ./forest_fire 4 >> performance_all.csv
+done
+
+echo "所有测试完成。"
+```
+
+保存此脚本为run_tests.sh，然后执行：
+```
+chmod +x run_tests.sh
+./run_tests.sh
+```
+
+这将运行所有必要的测试来完成题目要求的分析任务。

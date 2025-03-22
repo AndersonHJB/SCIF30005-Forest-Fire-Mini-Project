@@ -6,7 +6,7 @@ CXXFLAGS = -std=c++11 -O3 -Wall
 TARGET = forest_fire_mpi
 
 # 编译规则
-$(TARGET): forest_fire_mpi.cpp
+$(TARGET): forest_fire.cpp
 	$(CXX) $(CXXFLAGS) -o $(TARGET) forest_fire_mpi.cpp
 
 # 清理规则
