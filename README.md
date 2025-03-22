@@ -320,7 +320,18 @@ done
   ```
 </details>
 
+## 4.2 参数输出解释（与题目一致）
 
+<details><summary>点击展开内容</summary>
+| 输出字段                               | 说明                                   | 对应题目要求                                      |
+| -------------------------------------- | -------------------------------------- | ------------------------------------------------- |
+| `Average steps before fire stops`      | 火灾熄灭前所经历的平均时间步数         | ✔️ the number of steps before fire stops           |
+| `Fraction of runs that reached bottom` | M 次运行中火到达底部的比例（介于 0~1） | ✔️ whether or not fire reached the bottom (统计版) |
+| `Average wall time (max among procs)`  | 每次运行的最大耗时（表示 walltime）    | ✔️ time taken to run a simulation                  |
+
+> 🔍 **注：\**程序运行了 \*\*M 次模拟\*\*，所以这些是 \*\*平均统计值\*\*。如果你希望看到每次模拟的\**单独值**（比如用于调试或收敛性图表），也可以在代码中打印每次 `run` 的 `steps`、`reachedBottom`、`elapsed time`。是否需要我给你添加这一功能？
+
+</details>
 
 
 
