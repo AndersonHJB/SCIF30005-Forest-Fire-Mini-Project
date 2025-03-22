@@ -173,15 +173,17 @@ mpirun -np 32 ./forest_fire 500 0.6 50
 - 「不同 $N$ 并行性能分析（收集时间、速度比等），讨论可用 MPI 任务数」；
 - 支持大规模（如 $N=500$）以测试并行性能。
 
-# 学生要求实现脚本
+# 3. 学生要求实现脚本
 
-```bash
-mpirun -np <nproc> ./forest_fire N p M [optional_input_file]
+## 3.1 第一次索要
+
+命令：`mpirun -np <nproc> ./forest_fire N p M [optional_input_file]`
+
 我要你写一个 bash 脚本，其中参数需要如下变换：
-N= 50 100 150 200
-p=0.1 0.2......0.9
-M=50 (固定）
-```
+
+- `N= 50 100 150 200`
+- `p=0.1 0.2......0.9`
+- `M=50 (固定）`
 
 ```bash
 #!/bin/bash
@@ -210,9 +212,43 @@ for N in 50 100 150 200; do
 done
 ```
 
-保存输出到 txt：
+## 3.2 ✅ 方式一：统一写入一个总文件（推荐）
 
+```bash
+#!/bin/bash
 
+nproc=4  # 设置进程数
+output_file="all_results.txt"
+> "$output_file"  # 清空之前的内容
+
+for N in $(seq 50 50 200); do
+  for p in $(seq 0.1 0.1 0.9); do
+    echo "Running N=$N, p=$p, M=50" >> "$output_file"
+    mpirun -np $nproc ./forest_fire $N $p 50 >> "$output_file" 2>&1
+    echo "-----------------------------" >> "$output_file"
+  done
+done
+```
+
+- ✅ `>> "$output_file"` 表示追加输出；
+- ✅ `2>&1` 表示同时捕获标准输出和标准错误（方便调试）；
+
+## 3.3 ✅ 方式二：每组参数一个独立的文件
+
+```bash
+#!/bin/bash
+
+nproc=4  # 设置进程数
+
+for N in $(seq 50 50 200); do
+  for p in $(seq 0.1 0.1 0.9); do
+    # 用下划线拼出一个文件名，比如 output_N50_p0.1.txt
+    filename="output_N${N}_p${p}.txt"
+    echo "Running N=$N, p=$p, M=50" > "$filename"
+    mpirun -np $nproc ./forest_fire $N $p 50 >> "$filename" 2>&1
+  done
+done
+```
 
 
 
