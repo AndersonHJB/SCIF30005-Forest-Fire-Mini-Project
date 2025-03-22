@@ -1,4 +1,4 @@
 /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project -B /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug
--- Configuring done (1.2s)
+-- Configuring done (0.8s)
 -- Generating done (0.0s)
 -- Build files have been written to: /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug

@@ -49,8 +49,8 @@ cmake_ninja_workdir = /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Min
 
 build cmake_object_order_depends_target_untitled12: phony || .
 
-build CMakeFiles/untitled12.dir/forest_fire_mpi.cpp.o: CXX_COMPILER__untitled12_unscanned_Debug /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/forest_fire_mpi.cpp || cmake_object_order_depends_target_untitled12
-  DEP_FILE = CMakeFiles/untitled12.dir/forest_fire_mpi.cpp.o.d
+build CMakeFiles/untitled12.dir/forest_fire.cpp.o: CXX_COMPILER__untitled12_unscanned_Debug /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/forest_fire.cpp || cmake_object_order_depends_target_untitled12
+  DEP_FILE = CMakeFiles/untitled12.dir/forest_fire.cpp.o.d
   FLAGS = -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
   INCLUDES = -I/opt/homebrew/Cellar/open-mpi/5.0.7/include
   OBJECT_DIR = CMakeFiles/untitled12.dir
@@ -64,7 +64,7 @@ build CMakeFiles/untitled12.dir/forest_fire_mpi.cpp.o: CXX_COMPILER__untitled12_
 #############################################
 # Link the executable untitled12
 
-build untitled12: CXX_EXECUTABLE_LINKER__untitled12_Debug CMakeFiles/untitled12.dir/forest_fire_mpi.cpp.o | /opt/homebrew/Cellar/open-mpi/5.0.7/lib/libmpi.dylib
+build untitled12: CXX_EXECUTABLE_LINKER__untitled12_Debug CMakeFiles/untitled12.dir/forest_fire.cpp.o | /opt/homebrew/Cellar/open-mpi/5.0.7/lib/libmpi.dylib
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk
   LINK_LIBRARIES = /opt/homebrew/Cellar/open-mpi/5.0.7/lib/libmpi.dylib
   OBJECT_DIR = CMakeFiles/untitled12.dir

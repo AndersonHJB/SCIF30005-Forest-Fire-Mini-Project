@@ -1,0 +1,9 @@
+Running N=150, p=0.4, M=50
+=============================================
+Forest Fire Simulation Results
+  N = 150, p = 0.4, M = 50
+---------------------------------------------
+  Average steps before fire stops: 13.98
+  Fraction of runs that reached bottom: 0
+  Average wall time (max among procs): 0.00088386 s
+=============================================
