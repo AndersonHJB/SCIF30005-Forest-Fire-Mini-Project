@@ -344,7 +344,26 @@ echo "✅ 所有测试完成！"
 
 > 🔍 注：程序运行了 M 次模拟，所以这些是 平均统计值。如果你希望看到每次模拟的单独值（比如用于调试或收敛性图表），也可以在代码中打印每次 `run` 的 `steps`、`reachedBottom`、`elapsed time`。是否需要我给你添加这一功能？
 
+当前代码输出内容（当 `M > 1`）：
 
+```bash
+=============================================
+Forest Fire Simulation Results
+  N = 100, p = 0.5, M = 50
+---------------------------------------------
+  Average steps before fire stops: 43.7
+  Fraction of runs that reached bottom: 0.82
+  Average wall time (max among procs): 0.0125 s
+=============================================
+```
+
+这对应的是：
+
+| 字段                      | 含义                                        |
+| ------------------------- | ------------------------------------------- |
+| `Average steps`           | 50 次运行的平均步数                         |
+| `Fraction reached bottom` | 50 次运行中，有多少次火烧到底部（范围 0~1） |
+| `Average wall time`       | 每次模拟的最大 walltime 的平均              |
 
 
 
