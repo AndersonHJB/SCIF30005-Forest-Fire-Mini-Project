@@ -173,6 +173,45 @@ mpirun -np 32 ./forest_fire 500 0.6 50
 - 「不同 $N$ 并行性能分析（收集时间、速度比等），讨论可用 MPI 任务数」；
 - 支持大规模（如 $N=500$）以测试并行性能。
 
+# 学生要求实现脚本
+
+```bash
+mpirun -np <nproc> ./forest_fire N p M [optional_input_file]
+我要你写一个 bash 脚本，其中参数需要如下变换：
+N= 50 100 150 200
+p=0.1 0.2......0.9
+M=50 (固定）
+```
+
+```bash
+#!/bin/bash
+
+nproc=4  # 根据你的需要设置进程数
+
+for N in 50 100 150 200; do  # for N in $(seq 50 50 200); do
+  for p in $(seq 0.1 0.1 0.9); do
+    mpirun -np $nproc ./forest_fire $N $p 50
+  done
+done
+```
+
+如果你还有一个可选的输入文件，比如 `input.txt`，可以这样改：
+
+```bash
+#!/bin/bash
+
+nproc=4  # 根据你的需要设置进程数
+input_file="input.txt"
+
+for N in 50 100 150 200; do
+  for p in $(seq 0.1 0.1 0.9); do
+    mpirun -np $nproc ./forest_fire $N $p 50 $input_file
+  done
+done
+```
+
+保存输出到 txt：
+
 
 
 
