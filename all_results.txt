@@ -3,9 +3,9 @@ Running N=50, p=0.1, M=50
 Forest Fire Simulation Results
   N = 50, p = 0.1, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 1.68
+  Average steps before fire stops: 1.36
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 2.062e-05 s
+  Average wall time (max among procs): 4.34896e-05 s
 =============================================
 -----------------------------
 Running N=50, p=0.2, M=50
@@ -13,9 +13,9 @@ Running N=50, p=0.2, M=50
 Forest Fire Simulation Results
   N = 50, p = 0.2, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 2.78
+  Average steps before fire stops: 2.96
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.0001007 s
+  Average wall time (max among procs): 6.98186e-05 s
 =============================================
 -----------------------------
 Running N=50, p=0.3, M=50
@@ -23,9 +23,9 @@ Running N=50, p=0.3, M=50
 Forest Fire Simulation Results
   N = 50, p = 0.3, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 5.42
+  Average steps before fire stops: 5.02
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 3.198e-05 s
+  Average wall time (max among procs): 8.81158e-05 s
 =============================================
 -----------------------------
 Running N=50, p=0.4, M=50
@@ -33,9 +33,9 @@ Running N=50, p=0.4, M=50
 Forest Fire Simulation Results
   N = 50, p = 0.4, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 10.32
+  Average steps before fire stops: 9.02
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 6.9e-05 s
+  Average wall time (max among procs): 0.000113376 s
 =============================================
 -----------------------------
 Running N=50, p=0.5, M=50
@@ -43,9 +43,9 @@ Running N=50, p=0.5, M=50
 Forest Fire Simulation Results
   N = 50, p = 0.5, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 20.36
+  Average steps before fire stops: 24.68
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00012584 s
+  Average wall time (max among procs): 0.000185341 s
 =============================================
 -----------------------------
 Running N=50, p=0.6, M=50
@@ -53,9 +53,9 @@ Running N=50, p=0.6, M=50
 Forest Fire Simulation Results
   N = 50, p = 0.6, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 82.68
+  Average steps before fire stops: 82.94
   Fraction of runs that reached bottom: 0.6
-  Average wall time (max among procs): 0.00027796 s
+  Average wall time (max among procs): 0.000474799 s
 =============================================
 -----------------------------
 Running N=50, p=0.7, M=50
@@ -63,9 +63,9 @@ Running N=50, p=0.7, M=50
 Forest Fire Simulation Results
   N = 50, p = 0.7, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 76.78
+  Average steps before fire stops: 75.48
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00030646 s
+  Average wall time (max among procs): 0.000477687 s
 =============================================
 -----------------------------
 Running N=50, p=0.8, M=50
@@ -73,9 +73,9 @@ Running N=50, p=0.8, M=50
 Forest Fire Simulation Results
   N = 50, p = 0.8, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 63.62
+  Average steps before fire stops: 63.24
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00024968 s
+  Average wall time (max among procs): 0.000425628 s
 =============================================
 -----------------------------
 Running N=50, p=0.9, M=50
@@ -83,9 +83,9 @@ Running N=50, p=0.9, M=50
 Forest Fire Simulation Results
   N = 50, p = 0.9, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 56.54
+  Average steps before fire stops: 56.46
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00023286 s
+  Average wall time (max among procs): 0.000390642 s
 =============================================
 -----------------------------
 Running N=100, p=0.1, M=50
@@ -93,9 +93,9 @@ Running N=100, p=0.1, M=50
 Forest Fire Simulation Results
   N = 100, p = 0.1, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 1.82
+  Average steps before fire stops: 1.92
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.0001735 s
+  Average wall time (max among procs): 7.30297e-05 s
 =============================================
 -----------------------------
 Running N=100, p=0.2, M=50
@@ -103,9 +103,9 @@ Running N=100, p=0.2, M=50
 Forest Fire Simulation Results
   N = 100, p = 0.2, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 3.74
+  Average steps before fire stops: 4.04
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00016186 s
+  Average wall time (max among procs): 0.000111944 s
 =============================================
 -----------------------------
 Running N=100, p=0.3, M=50
@@ -113,9 +113,9 @@ Running N=100, p=0.3, M=50
 Forest Fire Simulation Results
   N = 100, p = 0.3, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 6.5
+  Average steps before fire stops: 6.58
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00010776 s
+  Average wall time (max among procs): 0.000145599 s
 =============================================
 -----------------------------
 Running N=100, p=0.4, M=50
@@ -123,9 +123,9 @@ Running N=100, p=0.4, M=50
 Forest Fire Simulation Results
   N = 100, p = 0.4, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 11.98
+  Average steps before fire stops: 11.92
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.0001964 s
+  Average wall time (max among procs): 0.000248145 s
 =============================================
 -----------------------------
 Running N=100, p=0.5, M=50
@@ -133,9 +133,9 @@ Running N=100, p=0.5, M=50
 Forest Fire Simulation Results
   N = 100, p = 0.5, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 28.88
+  Average steps before fire stops: 29.92
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00034588 s
+  Average wall time (max among procs): 0.000507716 s
 =============================================
 -----------------------------
 Running N=100, p=0.6, M=50
@@ -143,9 +143,9 @@ Running N=100, p=0.6, M=50
 Forest Fire Simulation Results
   N = 100, p = 0.6, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 175.26
-  Fraction of runs that reached bottom: 0.56
-  Average wall time (max among procs): 0.00168406 s
+  Average steps before fire stops: 201.08
+  Fraction of runs that reached bottom: 0.72
+  Average wall time (max among procs): 0.00246429 s
 =============================================
 -----------------------------
 Running N=100, p=0.7, M=50
@@ -153,9 +153,9 @@ Running N=100, p=0.7, M=50
 Forest Fire Simulation Results
   N = 100, p = 0.7, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 145.08
+  Average steps before fire stops: 144.76
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00137786 s
+  Average wall time (max among procs): 0.00190397 s
 =============================================
 -----------------------------
 Running N=100, p=0.8, M=50
@@ -163,9 +163,9 @@ Running N=100, p=0.8, M=50
 Forest Fire Simulation Results
   N = 100, p = 0.8, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 121.92
+  Average steps before fire stops: 122.48
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00123136 s
+  Average wall time (max among procs): 0.00155918 s
 =============================================
 -----------------------------
 Running N=100, p=0.9, M=50
@@ -173,9 +173,9 @@ Running N=100, p=0.9, M=50
 Forest Fire Simulation Results
   N = 100, p = 0.9, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 110.58
+  Average steps before fire stops: 110.88
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00114154 s
+  Average wall time (max among procs): 0.00141982 s
 =============================================
 -----------------------------
 Running N=150, p=0.1, M=50
@@ -183,9 +183,9 @@ Running N=150, p=0.1, M=50
 Forest Fire Simulation Results
   N = 150, p = 0.1, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 2.02
+  Average steps before fire stops: 2.1
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00038322 s
+  Average wall time (max among procs): 9.28931e-05 s
 =============================================
 -----------------------------
 Running N=150, p=0.2, M=50
@@ -193,9 +193,9 @@ Running N=150, p=0.2, M=50
 Forest Fire Simulation Results
   N = 150, p = 0.2, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 3.8
+  Average steps before fire stops: 4.68
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00034342 s
+  Average wall time (max among procs): 0.000163398 s
 =============================================
 -----------------------------
 Running N=150, p=0.3, M=50
@@ -203,9 +203,9 @@ Running N=150, p=0.3, M=50
 Forest Fire Simulation Results
   N = 150, p = 0.3, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 7.76
+  Average steps before fire stops: 7.56
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00062402 s
+  Average wall time (max among procs): 0.000284366 s
 =============================================
 -----------------------------
 Running N=150, p=0.4, M=50
@@ -213,9 +213,9 @@ Running N=150, p=0.4, M=50
 Forest Fire Simulation Results
   N = 150, p = 0.4, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 14.76
+  Average steps before fire stops: 15.32
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00054198 s
+  Average wall time (max among procs): 0.000607079 s
 =============================================
 -----------------------------
 Running N=150, p=0.5, M=50
@@ -223,9 +223,9 @@ Running N=150, p=0.5, M=50
 Forest Fire Simulation Results
   N = 150, p = 0.5, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 33.26
+  Average steps before fire stops: 37.6
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00119402 s
+  Average wall time (max among procs): 0.00145812 s
 =============================================
 -----------------------------
 Running N=150, p=0.6, M=50
@@ -233,9 +233,9 @@ Running N=150, p=0.6, M=50
 Forest Fire Simulation Results
   N = 150, p = 0.6, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 297.54
-  Fraction of runs that reached bottom: 0.64
-  Average wall time (max among procs): 0.00622792 s
+  Average steps before fire stops: 305.4
+  Fraction of runs that reached bottom: 0.68
+  Average wall time (max among procs): 0.00984655 s
 =============================================
 -----------------------------
 Running N=150, p=0.7, M=50
@@ -243,9 +243,9 @@ Running N=150, p=0.7, M=50
 Forest Fire Simulation Results
   N = 150, p = 0.7, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 211.58
+  Average steps before fire stops: 211.78
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00453238 s
+  Average wall time (max among procs): 0.00605544 s
 =============================================
 -----------------------------
 Running N=150, p=0.8, M=50
@@ -253,9 +253,9 @@ Running N=150, p=0.8, M=50
 Forest Fire Simulation Results
   N = 150, p = 0.8, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 180.58
+  Average steps before fire stops: 181.32
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00351376 s
+  Average wall time (max among procs): 0.0048664 s
 =============================================
 -----------------------------
 Running N=150, p=0.9, M=50
@@ -263,9 +263,9 @@ Running N=150, p=0.9, M=50
 Forest Fire Simulation Results
   N = 150, p = 0.9, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 164.3
+  Average steps before fire stops: 164.34
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00333848 s
+  Average wall time (max among procs): 0.00422412 s
 =============================================
 -----------------------------
 Running N=200, p=0.1, M=50
@@ -273,9 +273,9 @@ Running N=200, p=0.1, M=50
 Forest Fire Simulation Results
   N = 200, p = 0.1, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 2.42
+  Average steps before fire stops: 2.5
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00051406 s
+  Average wall time (max among procs): 0.000157365 s
 =============================================
 -----------------------------
 Running N=200, p=0.2, M=50
@@ -283,9 +283,9 @@ Running N=200, p=0.2, M=50
 Forest Fire Simulation Results
   N = 200, p = 0.2, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 4.6
+  Average steps before fire stops: 4.36
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00049246 s
+  Average wall time (max among procs): 0.000259947 s
 =============================================
 -----------------------------
 Running N=200, p=0.3, M=50
@@ -293,9 +293,9 @@ Running N=200, p=0.3, M=50
 Forest Fire Simulation Results
   N = 200, p = 0.3, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 8.02
+  Average steps before fire stops: 7.28
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00057412 s
+  Average wall time (max among procs): 0.000478505 s
 =============================================
 -----------------------------
 Running N=200, p=0.4, M=50
@@ -303,9 +303,9 @@ Running N=200, p=0.4, M=50
 Forest Fire Simulation Results
   N = 200, p = 0.4, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 15.54
+  Average steps before fire stops: 15.04
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00087702 s
+  Average wall time (max among procs): 0.0010498 s
 =============================================
 -----------------------------
 Running N=200, p=0.5, M=50
@@ -313,9 +313,9 @@ Running N=200, p=0.5, M=50
 Forest Fire Simulation Results
   N = 200, p = 0.5, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 38.38
+  Average steps before fire stops: 38.04
   Fraction of runs that reached bottom: 0
-  Average wall time (max among procs): 0.00207948 s
+  Average wall time (max among procs): 0.00275413 s
 =============================================
 -----------------------------
 Running N=200, p=0.6, M=50
@@ -323,9 +323,9 @@ Running N=200, p=0.6, M=50
 Forest Fire Simulation Results
   N = 200, p = 0.6, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 447.22
-  Fraction of runs that reached bottom: 0.82
-  Average wall time (max among procs): 0.0167302 s
+  Average steps before fire stops: 454.18
+  Fraction of runs that reached bottom: 0.78
+  Average wall time (max among procs): 0.0269984 s
 =============================================
 -----------------------------
 Running N=200, p=0.7, M=50
@@ -333,9 +333,9 @@ Running N=200, p=0.7, M=50
 Forest Fire Simulation Results
   N = 200, p = 0.7, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 277.96
+  Average steps before fire stops: 277.7
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00952274 s
+  Average wall time (max among procs): 0.0148649 s
 =============================================
 -----------------------------
 Running N=200, p=0.8, M=50
@@ -343,9 +343,9 @@ Running N=200, p=0.8, M=50
 Forest Fire Simulation Results
   N = 200, p = 0.8, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 238.72
+  Average steps before fire stops: 238.8
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00811768 s
+  Average wall time (max among procs): 0.011478 s
 =============================================
 -----------------------------
 Running N=200, p=0.9, M=50
@@ -353,8 +353,8 @@ Running N=200, p=0.9, M=50
 Forest Fire Simulation Results
   N = 200, p = 0.9, M = 50
 ---------------------------------------------
-  Average steps before fire stops: 218
+  Average steps before fire stops: 217.94
   Fraction of runs that reached bottom: 1
-  Average wall time (max among procs): 0.00695548 s
+  Average wall time (max among procs): 0.00947051 s
 =============================================
 -----------------------------

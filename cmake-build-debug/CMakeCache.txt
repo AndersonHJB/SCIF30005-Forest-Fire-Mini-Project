@@ -290,6 +290,12 @@ PKG_CONFIG_ARGN:STRING=
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/opt/homebrew/bin/pkg-config
 
+//No help, variable specified on the command line.
+Python3_EXECUTABLE:UNINITIALIZED=/Users/huangjiabao/anaconda3/envs/SCIF30005-Forest-Fire-Mini-Project/bin/python
+
+//No help, variable specified on the command line.
+Python_EXECUTABLE:UNINITIALIZED=/Users/huangjiabao/anaconda3/envs/SCIF30005-Forest-Fire-Mini-Project/bin/python
+
 //Value Computed by CMake
 untitled12_BINARY_DIR:STATIC=/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug
 

@@ -1,4 +1,26 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project -B /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug
--- Configuring done (0.8s)
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -DPython_EXECUTABLE=/Users/huangjiabao/anaconda3/envs/SCIF30005-Forest-Fire-Mini-Project/bin/python -DPython3_EXECUTABLE=/Users/huangjiabao/anaconda3/envs/SCIF30005-Forest-Fire-Mini-Project/bin/python -S /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project -B /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug
+-- The C compiler identification is AppleClang 16.0.0.16000026
+-- The CXX compiler identification is AppleClang 16.0.0.16000026
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Library/Developer/CommandLineTools/usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found MPI_C: /opt/homebrew/Cellar/open-mpi/5.0.7/lib/libmpi.dylib (found version "3.1")
+-- Found MPI_CXX: /opt/homebrew/Cellar/open-mpi/5.0.7/lib/libmpi.dylib (found version "3.1")
+-- Found MPI: TRUE (found version "3.1")
+-- Configuring done (2.7s)
 -- Generating done (0.0s)
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    Python3_EXECUTABLE
+    Python_EXECUTABLE
+
+
 -- Build files have been written to: /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug
