@@ -16,7 +16,7 @@
 import re
 
 def main():
-    input_file = "all_results.txt"
+    input_file = "/all_results.txt"
     output_file = "all_results.csv"
 
     # 正则表达式（或字符串查找）来捕捉所需信息

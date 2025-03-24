@@ -1,7 +1,7 @@
 #!/bin/bash
 
 nproc=4
-csv_file="Implementation.csv"
+csv_file="output/Implementation.csv"
 
 # 初始化 CSV 表头
 echo "N,p,M,avg_steps,fraction_reached_bottom,avg_wall_time_s" > "$csv_file"
