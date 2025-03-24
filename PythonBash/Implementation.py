@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # 读取CSV文件
-df = pd.read_csv("../output/results_part1.csv")
+df = pd.read_csv("../output/Implementation.csv")
 # -------------------------------
 # 第一张图: 火到达底部的概率 vs p
 # -------------------------------
@@ -20,7 +20,8 @@ plt.xlabel("p")
 plt.ylabel("Fraction of runs that reached bottom")
 plt.title("Fire Spread Probability vs p")
 plt.legend()
-plt.show()  # 生成第一张图
+# plt.show()  # 生成第一张图
+plt.savefig("fire_spread_probability.png")
 
 # -------------------------------
 # 第二张图: 平均步数 vs p
@@ -35,4 +36,5 @@ plt.xlabel("p")
 plt.ylabel("Average Steps Before Fire Stops")
 plt.title("Average Steps vs p")
 plt.legend()
-plt.show()  # 生成第二张图
+# plt.show()  # 生成第二张图
+plt.savefig("average_steps.png")

@@ -539,3 +539,93 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindMPI.cmake:1282 (try_compile)"
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindMPI.cmake:1326 (_MPI_try_staged_settings)"
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindMPI.cmake:1649 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:6 (find_package)"
+    description: "The MPI test test_mpi for C in mode normal"
+    directories:
+      source: "/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lxQZIg"
+      binary: "/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lxQZIg"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "MPI_RESULT_C_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lxQZIg'
+        
+        Run Build Command(s): /Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -v cmTC_90c68
+        [1/2] /Library/Developer/CommandLineTools/usr/bin/cc  -isystem /opt/homebrew/Cellar/open-mpi/5.0.7/include -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics -MD -MT CMakeFiles/cmTC_90c68.dir/test_mpi.c.o -MF CMakeFiles/cmTC_90c68.dir/test_mpi.c.o.d -o CMakeFiles/cmTC_90c68.dir/test_mpi.c.o -c /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-lxQZIg/test_mpi.c
+        [2/2] : && /Library/Developer/CommandLineTools/usr/bin/cc -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_90c68.dir/test_mpi.c.o -o cmTC_90c68  /opt/homebrew/Cellar/open-mpi/5.0.7/lib/libmpi.dylib && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindMPI.cmake:1282 (try_compile)"
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindMPI.cmake:1326 (_MPI_try_staged_settings)"
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindMPI.cmake:1649 (_MPI_check_lang_works)"
+      - "CMakeLists.txt:6 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode normal"
+    directories:
+      source: "/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-jNRHFu"
+      binary: "/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-jNRHFu"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_normal"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-jNRHFu'
+        
+        Run Build Command(s): /Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -v cmTC_6c5f6
+        [1/2] /Library/Developer/CommandLineTools/usr/bin/c++  -isystem /opt/homebrew/Cellar/open-mpi/5.0.7/include -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics -MD -MT CMakeFiles/cmTC_6c5f6.dir/test_mpi.cpp.o -MF CMakeFiles/cmTC_6c5f6.dir/test_mpi.cpp.o.d -o CMakeFiles/cmTC_6c5f6.dir/test_mpi.cpp.o -c /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-jNRHFu/test_mpi.cpp
+        [2/2] : && /Library/Developer/CommandLineTools/usr/bin/c++ -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_6c5f6.dir/test_mpi.cpp.o -o cmTC_6c5f6  /opt/homebrew/Cellar/open-mpi/5.0.7/lib/libmpi.dylib && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindMPI.cmake:1282 (try_compile)"
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindMPI.cmake:1676 (_MPI_try_staged_settings)"
+      - "CMakeLists.txt:6 (find_package)"
+    description: "The MPI test test_mpi for CXX in mode MPICXX"
+    directories:
+      source: "/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-i2Iud2"
+      binary: "/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-i2Iud2"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk"
+    buildResult:
+      variable: "MPI_RESULT_CXX_test_mpi_MPICXX"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-i2Iud2'
+        
+        Run Build Command(s): /Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -v cmTC_10d90
+        [1/2] /Library/Developer/CommandLineTools/usr/bin/c++  -isystem /opt/homebrew/Cellar/open-mpi/5.0.7/include -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics -MD -MT CMakeFiles/cmTC_10d90.dir/test_mpi.cpp.o -MF CMakeFiles/cmTC_10d90.dir/test_mpi.cpp.o.d -o CMakeFiles/cmTC_10d90.dir/test_mpi.cpp.o -c /Users/huangjiabao/CLionProjects/SCIF30005-Forest-Fire-Mini-Project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-i2Iud2/test_mpi.cpp
+        [2/2] : && /Library/Developer/CommandLineTools/usr/bin/c++ -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cmTC_10d90.dir/test_mpi.cpp.o -o cmTC_10d90  /opt/homebrew/Cellar/open-mpi/5.0.7/lib/libmpi.dylib && :
+        
+      exitCode: 0
+...
