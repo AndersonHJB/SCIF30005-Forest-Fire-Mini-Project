@@ -20,7 +20,7 @@
 N=100                # 网格大小
 NP=4                 # 使用多少个 MPI 进程
 EXEC=./forest_fire   # 可执行文件路径
-CSV_FILE="results_convergence.csv"
+CSV_FILE="./output/model_convergence.csv"
 
 # 不同 p 的列表 (固定 M=50)
 ARRAY_P=(0.1 0.3 0.5 0.7 0.9)
