@@ -15,6 +15,7 @@ ax1 = fig1.add_subplot(111)
 ax1.plot(df_p06["M"], df_p06["avg_steps"], marker='o', label="Average Steps")
 ax1.set_xlabel("M (number of repeats)")
 ax1.set_ylabel("Average Steps before fire stops")
+ax1.set_xticks(df_p06["M"].tolist())
 
 # 右轴：Fraction Reached Bottom
 ax2 = ax1.twinx()
@@ -25,7 +26,7 @@ fig1.legend(loc="upper left", bbox_to_anchor=(0.12, 0.88))
 plt.title("Convergence Analysis at p = 0.6")
 
 # 保存图1
-fig1.savefig("figure1_convergence_p06.png", dpi=300)
+fig1.savefig("./output/figure1_convergence_p06.png", dpi=300)
 print("✅ 图1 已保存为 figure1_convergence_p06.png")
 
 # 3. 图2：固定 M=50，分析不同 p 下的步数变化
@@ -41,7 +42,7 @@ ax3.set_ylabel("Average Steps before fire stops")
 plt.title("Average Steps vs p (M = 50)")
 
 # 保存图2
-fig2.savefig("figure2_avg_steps_vs_p.png", dpi=300)
+fig2.savefig("./output/figure2_avg_steps_vs_p.png", dpi=300)
 print("✅ 图2 已保存为 figure2_avg_steps_vs_p.png")
 
 # 可选：也可以显示图（交互查看）

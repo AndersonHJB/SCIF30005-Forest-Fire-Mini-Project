@@ -12,6 +12,7 @@ ax1 = fig1.add_subplot(111)
 ax1.plot(df_p06["M"], df_p06["avg_steps"], marker='o', label="Average Steps")
 ax1.set_xlabel("M (number of repeats)")
 ax1.set_ylabel("Average Steps before fire stops")
+ax1.set_xticks(df_p06["M"].tolist())
 
 # 右轴：Fraction Reached Bottom
 ax2 = ax1.twinx()
