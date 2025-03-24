@@ -23,7 +23,7 @@ EXEC=./forest_fire   # 可执行文件路径
 CSV_FILE="./output/model_convergence.csv"
 
 # 不同 p 的列表 (固定 M=50)
-ARRAY_P=(0.1 0.3 0.5 0.7 0.9)
+ARRAY_P=(0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9)
 
 # 针对 p=0.6，测试一系列 M (用于详细收敛分析)
 ARRAY_M=(10 20 30 40 50 60 70 80 90 100)

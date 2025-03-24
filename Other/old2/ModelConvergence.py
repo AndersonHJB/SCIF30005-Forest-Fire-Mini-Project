@@ -1,17 +1,14 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# 1. 读取 CSV 文件
-df = pd.read_csv("../output/model_convergence.csv")
+df = pd.read_csv("model_convergence.csv")
 
-# 2. 图1：固定 p=0.6，分析 M 的变化（收敛性）
 df_p06 = df[df["p"] == 0.6].copy()
 df_p06.sort_values(by="M", inplace=True)
 
 fig1 = plt.figure()
 ax1 = fig1.add_subplot(111)
 
-# 左轴：Average Steps
 ax1.plot(df_p06["M"], df_p06["avg_steps"], marker='o', label="Average Steps")
 ax1.set_xlabel("M (number of repeats)")
 ax1.set_ylabel("Average Steps before fire stops")
@@ -24,11 +21,9 @@ ax2.set_ylabel("Fraction Reached Bottom")
 fig1.legend(loc="upper left", bbox_to_anchor=(0.12, 0.88))
 plt.title("Convergence Analysis at p = 0.6")
 
-# 保存图1
 fig1.savefig("figure1_convergence_p06.png", dpi=300)
 print("✅ 图1 已保存为 figure1_convergence_p06.png")
 
-# 3. 图2：固定 M=50，分析不同 p 下的步数变化
 df_M50 = df[df["M"] == 50].copy()
 df_M50.sort_values(by="p", inplace=True)
 
@@ -40,7 +35,6 @@ ax3.set_xlabel("p (tree probability)")
 ax3.set_ylabel("Average Steps before fire stops")
 plt.title("Average Steps vs p (M = 50)")
 
-# 保存图2
 fig2.savefig("figure2_avg_steps_vs_p.png", dpi=300)
 print("✅ 图2 已保存为 figure2_avg_steps_vs_p.png")
 
