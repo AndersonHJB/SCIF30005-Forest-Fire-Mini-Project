@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-df = pd.read_csv("../output/Implementation.csv")
+df = pd.read_csv("Implementation.csv")
 
 unique_N = sorted(df["N"].unique())
 

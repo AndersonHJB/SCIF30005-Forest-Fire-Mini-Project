@@ -21,7 +21,7 @@ plt.ylabel("Fraction of runs that reached bottom")
 plt.title("Fire Spread Probability vs p")
 plt.legend()
 # plt.show()  # 生成第一张图
-plt.savefig("fire_spread_probability.png")
+plt.savefig("./output/fire_spread_probability.png")
 
 # -------------------------------
 # 第二张图: 平均步数 vs p
@@ -37,4 +37,4 @@ plt.ylabel("Average Steps Before Fire Stops")
 plt.title("Average Steps vs p")
 plt.legend()
 # plt.show()  # 生成第二张图
-plt.savefig("average_steps.png")
+plt.savefig("./output/average_steps.png")
