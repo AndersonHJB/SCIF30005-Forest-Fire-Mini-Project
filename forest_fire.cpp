@@ -1,21 +1,21 @@
-#include <mpi.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <random>
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
+#include <mpi.h>                           // 引入 MPI 并行编程库头文件
+#include <iostream>                        // 引入标准输入输出流头文件
+#include <fstream>                         // 引入文件流头文件，用于读写文件
+#include <vector>                          // 引入向量容器头文件
+#include <random>                          // 引入随机数库头文件
+#include <cstdlib>                         // 引入 C 标准库，包含 atoi/atof 等
+#include <ctime>                           // 引入时间相关函数头文件
+#include <algorithm>                       // 引入算法头文件，用于 std::copy 等操作
 
-/*
+/**
  * 状态编码：
  *   0 -> 空 (empty)
  *   1 -> 活树 (living tree)
  *   2 -> 燃烧 (burning)
  *   3 -> 死树 (dead)
  *
- * 该程序实现了一个火灾模型的并行版本。
- * 使用方法 (示例):
+ * 本程序实现一个森林火灾模型的并行版本 (MPI)：
+ * 使用方法:
  *   mpirun -np 4 ./forest_fire N p M [optional_input_file]
  *
  * 参数说明:
@@ -31,6 +31,7 @@
  *   - 平均运行时长等信息
  */
 
+// 定义一些整数常量，用于表示网格中每个单元的状态
 static const int EMPTY   = 0;
 static const int TREE    = 1;
 static const int BURNING = 2;
@@ -40,52 +41,58 @@ static const int DEAD    = 3;
  * 从文本文件读取网格（如果提供了输入文件）。
  * 文件中每行包含 N 个数字(0/1/...)，用空格分隔。
  * 返回 size=N*N 的一维数组形式存储的网格。
+ * 若出现文件无法打开或读取不足，会直接触发 MPI_Abort 结束程序。
  */
 std::vector<int> readGridFromFile(const std::string &filename, int N) {
-    std::ifstream fin(filename);
-    if(!fin.is_open()) {
-        std::cerr << "Error opening grid file: " << filename << std::endl;
-        MPI_Abort(MPI_COMM_WORLD, -1);
+    std::ifstream fin(filename);  // 尝试打开文件，创建输入文件流对象 fin
+    if(!fin.is_open()) {  // 判断文件是否打开成功
+        std::cerr << "Error opening grid file: " << filename << std::endl;  // 打印错误信息
+        MPI_Abort(MPI_COMM_WORLD, -1);  // 使用 MPI_Abort 终止所有进程
     }
 
-    std::vector<int> grid(N*N, 0);
-    for(int r = 0; r < N; r++) {
-        for(int c = 0; c < N; c++) {
-            if(!(fin >> grid[r*N + c])) {
+    std::vector<int> grid(N*N, 0);  // 创建一个大小为 N*N 的向量，初始为 0
+    for(int r = 0; r < N; r++) {  // 遍历每一行
+        for(int c = 0; c < N; c++) {  // 遍历每一列
+            if(!(fin >> grid[r*N + c])) {  // 从文件流中读取一个整数到 grid[r*N + c]，若失败则报错
                 std::cerr << "Error reading data from file: not enough entries." << std::endl;
-                MPI_Abort(MPI_COMM_WORLD, -1);
+                MPI_Abort(MPI_COMM_WORLD, -1);  // 终止进程
             }
         }
     }
-    fin.close();
-    return grid;
+    fin.close();  // 关闭文件流
+    return grid;  // 返回读取到的网格
 }
 
 /**
- * 基于给定的 N 和 p 随机生成一个网格，返回 size=N*N 的一维数组。
+ * 基于给定的 N 和 p 以及种子 seed，随机生成一个 N×N 的网格，用一维向量表示返回。
+ * 每个单元格有 p 的概率为 TREE (活树)，否则为 EMPTY (空地)。
  */
 std::vector<int> generateRandomGrid(int N, double p, unsigned int seed) {
-    std::mt19937 gen(seed);
-    std::uniform_real_distribution<double> dist(0.0, 1.0);
+    std::mt19937 gen(seed);  // 创建一个 Mersenne Twister 随机数引擎，使用指定种子
+    std::uniform_real_distribution<double> dist(0.0, 1.0);  // 创建一个 [0,1) 的均匀分布
 
-    std::vector<int> grid(N*N, 0);
-    for(int i = 0; i < N*N; i++) {
-        double rnd = dist(gen);
-        if(rnd < p) {
-            grid[i] = TREE;
+    std::vector<int> grid(N*N, 0);  // 创建一个 N*N 大小的向量，初始为 0
+    for(int i = 0; i < N*N; i++) {  // 遍历每个单元
+        double rnd = dist(gen);  // 生成一个 [0,1) 的随机数
+        if(rnd < p) {  // 若随机数小于 p
+            grid[i] = TREE;  // 则该单元为活树
         } else {
-            grid[i] = EMPTY;
+            grid[i] = EMPTY;  // 否则为空地
         }
     }
-    return grid;
+    return grid;  // 返回生成好的网格
 }
 
 /**
- * 进行一次模拟，基于“当前网格状态”，在本地子域上执行火灾扩散。
- * 返回：
+ * 作用：对给定的 globalGrid（大小 N×N）进行单次模拟（从头到尾火情演化），并使用行划分的方式在多进程间并行。
+ * 参数：
+ *    - globalGrid: 全局网格（只有 rank=0 的进程含有真实数据，其他进程可能只是占位）
+ *    - N: 网格大小
+ *    - rank: 当前进程编号
+ *    - size: 总进程数
+ * 返回：一个 pair，包含
  *   - steps: 火焰停止前总步数
  *   - reachedBottom: 是否到达底部(只需判断是否有任意单元在底部行着火过)
- *
  * 注意：这里要把网格在行方向上分块给各进程。通过交换上下边界来更新。
  */
 std::pair<int,bool> runSimulationOnce(std::vector<int> &globalGrid,
@@ -94,26 +101,30 @@ std::pair<int,bool> runSimulationOnce(std::vector<int> &globalGrid,
                                       int size)
 {
     // 每个进程负责 startRow ~ endRow-1 (共 localRows 行)
-    int rowsPerProc = N / size;
-    int remainder   = N % size;
-    int startRow, endRow;
+    // 首先计算本进程分到的行范围。每个进程可能分得的行数不一样，若无法整除则前 remainder 个进程多分配一行。
+    int rowsPerProc = N / size;  // 基本的“每个进程多少行”
+    int remainder   = N % size;  // 余数
+    int startRow, endRow;  // 起始行(含) 与 结束行(不含)
 
+    // 下面根据 remainder 计算 startRow、endRow
     if(rank < remainder) {
-        startRow = rank * (rowsPerProc + 1);
-        endRow   = startRow + (rowsPerProc + 1);
+        // 如果 rank 小于 remainder，则它会分到 rowsPerProc+1 行
+        startRow = rank * (rowsPerProc + 1);  // 起始行 = rank × (rowsPerProc + 1)
+        endRow   = startRow + (rowsPerProc + 1); // 结束行
     } else {
+        // 否则，rank>=remainder，分到 rowsPerProc 行
         startRow = remainder * (rowsPerProc + 1) + (rank - remainder) * rowsPerProc;
         endRow   = startRow + rowsPerProc;
     }
-    int localRows = endRow - startRow;
+    int localRows = endRow - startRow;  // 本地进程负责的行数
 
-    // 分配本地网格(大小 localRows * N)
+    // 分配本地网格 current 和 nextState，大小为 localRows*N
     std::vector<int> current(localRows*N, EMPTY);
     std::vector<int> nextState(localRows*N, EMPTY);
 
     // 把 globalGrid 中对应行的数据拷贝到 current
     // 只在 rank=0 时 globalGrid 才是真实的(若我们设计了在 root 收集/广播)
-    //   如果你想要效率高一些，可以使用 MPI_Scatterv 实现分发。此处演示简单做法：
+    //   如果想要效率高一些，可以使用 MPI_Scatterv 实现分发。此处演示简单做法：
     //   - root 进程把 globalGrid 分块发给其它进程
     //   - 或者所有进程先拿到整个 globalGrid，然后各自提取本地部分
     // 下面演示的方法：先 MPI_Bcast 给所有进程，然后各自拷贝
@@ -297,7 +308,7 @@ int main(int argc, char** argv){
         inputFile = argv[4];
     }
 
-    // 我们在 rank=0 进行网格的初始化，然后广播给其它进程
+    // 在 rank=0 进行网格的初始化，然后广播给其它进程
     std::vector<int> globalGrid;
     if(rank == 0) {
         // 如果从文件读取
