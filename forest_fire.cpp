@@ -340,7 +340,9 @@ int main(int argc, char **argv) {
             if (rank == 0) {
                 // 根据 run 的不同 seed 生成新的随机网格
                 // 这样才是真正 M 次独立的初始条件
-                unsigned int newSeed = (unsigned int) time(NULL) + run * 10000;
+//                unsigned int newSeed = (unsigned int) time(NULL) + run * 10000;
+                unsigned int newSeed = (unsigned int)time(NULL) + run + rank * 10000;
+
                 globalGrid = generateRandomGrid(N, p, newSeed);
             }
         }
