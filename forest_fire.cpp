@@ -32,10 +32,10 @@
  */
 
 // 定义一些整数常量，用于表示网格中每个单元的状态
-static const int EMPTY   = 0;
-static const int TREE    = 1;
+static const int EMPTY = 0;
+static const int TREE = 1;
 static const int BURNING = 2;
-static const int DEAD    = 3;
+static const int DEAD = 3;
 
 /**
  * 从文本文件读取网格（如果提供了输入文件）。
@@ -45,15 +45,15 @@ static const int DEAD    = 3;
  */
 std::vector<int> readGridFromFile(const std::string &filename, int N) {
     std::ifstream fin(filename);  // 尝试打开文件，创建输入文件流对象 fin
-    if(!fin.is_open()) {  // 判断文件是否打开成功
+    if (!fin.is_open()) {  // 判断文件是否打开成功
         std::cerr << "Error opening grid file: " << filename << std::endl;  // 打印错误信息
         MPI_Abort(MPI_COMM_WORLD, -1);  // 使用 MPI_Abort 终止所有进程
     }
 
-    std::vector<int> grid(N*N, 0);  // 创建一个大小为 N*N 的向量，初始为 0
-    for(int r = 0; r < N; r++) {  // 遍历每一行
-        for(int c = 0; c < N; c++) {  // 遍历每一列
-            if(!(fin >> grid[r*N + c])) {  // 从文件流中读取一个整数到 grid[r*N + c]，若失败则报错
+    std::vector<int> grid(N * N, 0);  // 创建一个大小为 N*N 的向量，初始为 0
+    for (int r = 0; r < N; r++) {  // 遍历每一行
+        for (int c = 0; c < N; c++) {  // 遍历每一列
+            if (!(fin >> grid[r * N + c])) {  // 从文件流中读取一个整数到 grid[r*N + c]，若失败则报错
                 std::cerr << "Error reading data from file: not enough entries." << std::endl;
                 MPI_Abort(MPI_COMM_WORLD, -1);  // 终止进程
             }
@@ -71,10 +71,10 @@ std::vector<int> generateRandomGrid(int N, double p, unsigned int seed) {
     std::mt19937 gen(seed);  // 创建一个 Mersenne Twister 随机数引擎，使用指定种子
     std::uniform_real_distribution<double> dist(0.0, 1.0);  // 创建一个 [0,1) 的均匀分布
 
-    std::vector<int> grid(N*N, 0);  // 创建一个 N*N 大小的向量，初始为 0
-    for(int i = 0; i < N*N; i++) {  // 遍历每个单元
+    std::vector<int> grid(N * N, 0);  // 创建一个 N*N 大小的向量，初始为 0
+    for (int i = 0; i < N * N; i++) {  // 遍历每个单元
         double rnd = dist(gen);  // 生成一个 [0,1) 的随机数
-        if(rnd < p) {  // 若随机数小于 p
+        if (rnd < p) {  // 若随机数小于 p
             grid[i] = TREE;  // 则该单元为活树
         } else {
             grid[i] = EMPTY;  // 否则为空地
@@ -95,32 +95,31 @@ std::vector<int> generateRandomGrid(int N, double p, unsigned int seed) {
  *   - reachedBottom: 是否到达底部(只需判断是否有任意单元在底部行着火过)
  * 注意：这里要把网格在行方向上分块给各进程。通过交换上下边界来更新。
  */
-std::pair<int,bool> runSimulationOnce(std::vector<int> &globalGrid,
-                                      int N,
-                                      int rank,
-                                      int size)
-{
+std::pair<int, bool> runSimulationOnce(std::vector<int> &globalGrid,
+                                       int N,
+                                       int rank,
+                                       int size) {
     // 每个进程负责 startRow ~ endRow-1 (共 localRows 行)
     // 首先计算本进程分到的行范围。每个进程可能分得的行数不一样，若无法整除则前 remainder 个进程多分配一行。
     int rowsPerProc = N / size;  // 基本的“每个进程多少行”
-    int remainder   = N % size;  // 余数
+    int remainder = N % size;  // 余数
     int startRow, endRow;  // 起始行(含) 与 结束行(不含)
 
     // 下面根据 remainder 计算 startRow、endRow
-    if(rank < remainder) {
+    if (rank < remainder) {
         // 如果 rank 小于 remainder，则它会分到 rowsPerProc+1 行
         startRow = rank * (rowsPerProc + 1);  // 起始行 = rank × (rowsPerProc + 1)
-        endRow   = startRow + (rowsPerProc + 1); // 结束行
+        endRow = startRow + (rowsPerProc + 1); // 结束行
     } else {
         // 否则，rank>=remainder，分到 rowsPerProc 行
         startRow = remainder * (rowsPerProc + 1) + (rank - remainder) * rowsPerProc;
-        endRow   = startRow + rowsPerProc;
+        endRow = startRow + rowsPerProc;
     }
     int localRows = endRow - startRow;  // 本地进程负责的行数
 
     // 分配本地网格 current 和 nextState，大小为 localRows*N
-    std::vector<int> current(localRows*N, EMPTY);
-    std::vector<int> nextState(localRows*N, EMPTY);
+    std::vector<int> current(localRows * N, EMPTY);
+    std::vector<int> nextState(localRows * N, EMPTY);
 
     // 把 globalGrid 中对应行的数据拷贝到 current
     // 只在 rank=0 时 globalGrid 才是真实的(若我们设计了在 root 收集/广播)
@@ -128,18 +127,18 @@ std::pair<int,bool> runSimulationOnce(std::vector<int> &globalGrid,
     //   - root 进程把 globalGrid 分块发给其它进程
     //   - 或者所有进程先拿到整个 globalGrid，然后各自提取本地部分
     // 下面演示的方法：先 MPI_Bcast 给所有进程，然后各自拷贝
-    MPI_Bcast(globalGrid.data(), N*N, MPI_INT, 0, MPI_COMM_WORLD);
-    for(int r = 0; r < localRows; r++) {
-        for(int c = 0; c < N; c++) {
-            current[r*N + c] = globalGrid[(startRow + r)*N + c];
+    MPI_Bcast(globalGrid.data(), N * N, MPI_INT, 0, MPI_COMM_WORLD);
+    for (int r = 0; r < localRows; r++) {
+        for (int c = 0; c < N; c++) {
+            current[r * N + c] = globalGrid[(startRow + r) * N + c];
         }
     }
 
     // 第一步：将 top row 的树点燃(仅在全局 top row)
     // 只需要在 rank=0 的那块对其所包含的 top row 做处理即可
-    if(rank == 0) {
-        for(int c = 0; c < N; c++) {
-            if(current[c] == TREE) {
+    if (rank == 0) {
+        for (int c = 0; c < N; c++) {
+            if (current[c] == TREE) {
                 current[c] = BURNING; // 这一行是 row=0
             }
         }
@@ -155,84 +154,84 @@ std::pair<int,bool> runSimulationOnce(std::vector<int> &globalGrid,
     std::vector<int> topRowRecv(N, 0), bottomRowRecv(N, 0);
 
     int steps = 0;
-    while(true) {
+    while (true) {
         // 各进程先把 current 拷到 nextState，以便逐步更新
         std::copy(current.begin(), current.end(), nextState.begin());
 
         // ghost cell 交换：把本地 top row 发给上面进程，对方接收为 bottom ghost
         // 以及把本地 bottom row 发给下面进程，对方接收为 top ghost
         // 如果没有上/下相邻进程，则不用发送
-        if(localRows > 0) {
-            for(int c = 0; c < N; c++) {
-                topRowSend[c]    = current[c];                // local top row = row 0
-                bottomRowSend[c] = current[(localRows-1)*N + c]; // local bottom row
+        if (localRows > 0) {
+            for (int c = 0; c < N; c++) {
+                topRowSend[c] = current[c];                // local top row = row 0
+                bottomRowSend[c] = current[(localRows - 1) * N + c]; // local bottom row
             }
         }
 
         // 发送给上
-        if(rank > 0) {
-            MPI_Send(topRowSend.data(), N, MPI_INT, rank-1, 0, MPI_COMM_WORLD);
+        if (rank > 0) {
+            MPI_Send(topRowSend.data(), N, MPI_INT, rank - 1, 0, MPI_COMM_WORLD);
         }
         // 接收来自下的 bottom row
-        if(rank < size-1) {
-            MPI_Recv(bottomRowRecv.data(), N, MPI_INT, rank+1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        if (rank < size - 1) {
+            MPI_Recv(bottomRowRecv.data(), N, MPI_INT, rank + 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
         // 发送给下
-        if(rank < size-1) {
-            MPI_Send(bottomRowSend.data(), N, MPI_INT, rank+1, 1, MPI_COMM_WORLD);
+        if (rank < size - 1) {
+            MPI_Send(bottomRowSend.data(), N, MPI_INT, rank + 1, 1, MPI_COMM_WORLD);
         }
         // 接收来自上的 top row
-        if(rank > 0) {
-            MPI_Recv(topRowRecv.data(), N, MPI_INT, rank-1, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        if (rank > 0) {
+            MPI_Recv(topRowRecv.data(), N, MPI_INT, rank - 1, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
 
         // 现在开始更新 nextState
         // 对于每个 cell，如果它是 TREE，检查其四邻中是否有 BURNING
         //   需要注意是否该邻居在 ghost 行
-        auto idx = [&](int r, int c){return r*N + c;};
+        auto idx = [&](int r, int c) { return r * N + c; };
 
-        for(int r = 0; r < localRows; r++){
-            for(int c = 0; c < N; c++){
-                int state = current[idx(r,c)];
-                if(state == TREE) {
+        for (int r = 0; r < localRows; r++) {
+            for (int c = 0; c < N; c++) {
+                int state = current[idx(r, c)];
+                if (state == TREE) {
                     bool hasBurningNeighbor = false;
                     // 上邻居
-                    if(r > 0) {
-                        if(current[idx(r-1,c)] == BURNING) hasBurningNeighbor = true;
+                    if (r > 0) {
+                        if (current[idx(r - 1, c)] == BURNING) hasBurningNeighbor = true;
                     } else {
                         // 看 ghost row(来自 rank-1)
-                        if(rank > 0) {
-                            if(topRowRecv[c] == BURNING) {
+                        if (rank > 0) {
+                            if (topRowRecv[c] == BURNING) {
                                 hasBurningNeighbor = true;
                             }
                         }
                     }
                     // 下邻居
-                    if(r < localRows-1) {
-                        if(current[idx(r+1,c)] == BURNING) hasBurningNeighbor = true;
+                    if (r < localRows - 1) {
+                        if (current[idx(r + 1, c)] == BURNING) hasBurningNeighbor = true;
                     } else {
                         // 看 ghost row(来自 rank+1)
-                        if(rank < size-1) {
-                            if(bottomRowRecv[c] == BURNING) {
+                        if (rank < size - 1) {
+                            if (bottomRowRecv[c] == BURNING) {
                                 hasBurningNeighbor = true;
                             }
                         }
                     }
                     // 左邻居
-                    if(c > 0 && current[idx(r,c-1)] == BURNING) {
+                    if (c > 0 && current[idx(r, c - 1)] == BURNING) {
                         hasBurningNeighbor = true;
                     }
                     // 右邻居
-                    if(c < N-1 && current[idx(r,c+1)] == BURNING) {
+                    if (c < N - 1 && current[idx(r, c + 1)] == BURNING) {
                         hasBurningNeighbor = true;
                     }
 
-                    if(hasBurningNeighbor) {
-                        nextState[idx(r,c)] = BURNING;
+                    if (hasBurningNeighbor) {
+                        nextState[idx(r, c)] = BURNING;
                     }
-                } else if(state == BURNING) {
+                } else if (state == BURNING) {
                     // 燃烧 -> 死
-                    nextState[idx(r,c)] = DEAD;
+                    nextState[idx(r, c)] = DEAD;
                 }
             }
         }
@@ -244,19 +243,19 @@ std::pair<int,bool> runSimulationOnce(std::vector<int> &globalGrid,
         // 同时也检查底部是否被点燃过
         int localBurningCount = 0;
         bool localReachedBottomThisStep = false;
-        for(int r = 0; r < localRows; r++){
-            for(int c = 0; c < N; c++){
-                if(current[idx(r,c)] == BURNING) {
+        for (int r = 0; r < localRows; r++) {
+            for (int c = 0; c < N; c++) {
+                if (current[idx(r, c)] == BURNING) {
                     localBurningCount++;
                 }
                 // 判断全局行号
                 int globalRow = startRow + r;
-                if(globalRow == N-1 && current[idx(r,c)] == BURNING) {
+                if (globalRow == N - 1 && current[idx(r, c)] == BURNING) {
                     localReachedBottomThisStep = true;
                 }
             }
         }
-        if(localReachedBottomThisStep) {
+        if (localReachedBottomThisStep) {
             reachedBottomLocal = true;
         }
 
@@ -265,7 +264,7 @@ std::pair<int,bool> runSimulationOnce(std::vector<int> &globalGrid,
         MPI_Allreduce(&localBurningCount, &globalBurningCount, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
         steps++;
 
-        if(globalBurningCount == 0) {
+        if (globalBurningCount == 0) {
             // 已经没有着火点了
             break;
         }
@@ -281,15 +280,15 @@ std::pair<int,bool> runSimulationOnce(std::vector<int> &globalGrid,
     return std::make_pair(steps, reachedBottom);
 }
 
-int main(int argc, char** argv){
+int main(int argc, char **argv) {
     MPI_Init(&argc, &argv);
 
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    if(argc < 4) {
-        if(rank == 0) {
+    if (argc < 4) {
+        if (rank == 0) {
             std::cerr << "Usage: mpirun -np <nproc> ./forest_fire N p M [optional_input_file]\n";
         }
         MPI_Abort(MPI_COMM_WORLD, -1);
@@ -303,28 +302,28 @@ int main(int argc, char** argv){
     // 如果有文件名，则尝试读取网格
     bool useFileInput = false;
     std::string inputFile;
-    if(argc > 4) {
+    if (argc > 4) {
         useFileInput = true;
         inputFile = argv[4];
     }
 
     // 在 rank=0 进行网格的初始化，然后广播给其它进程
     std::vector<int> globalGrid;
-    if(rank == 0) {
+    if (rank == 0) {
         // 如果从文件读取
-        if(useFileInput) {
+        if (useFileInput) {
             globalGrid = readGridFromFile(inputFile, N);
         }
             // 否则随机生成
             // 生成时可以重复 M 次，每次可以重新seed
         else {
             // 先生成一个初始网格用作第1次模拟，后面会根据run索引改变seed
-            unsigned int seed = (unsigned int)time(NULL);
+            unsigned int seed = (unsigned int) time(NULL);
             globalGrid = generateRandomGrid(N, p, seed);
         }
     } else {
         // 非 root 进程先分配空间
-        globalGrid.resize(N*N, 0);
+        globalGrid.resize(N * N, 0);
     }
 
     // 用于累计结果
@@ -333,15 +332,15 @@ int main(int argc, char** argv){
     int fireReachedBottomCount = 0; // 统计有多少次到达底部
 
     // M 次重复
-    for(int run = 0; run < M; run++) {
+    for (int run = 0; run < M; run++) {
         // 每次都要保证 globalGrid 是正确的初始状态
         // 若使用文件输入，则所有 run 都用同一个 grid；
         // 若随机生成，则每个 run 都重新生成
-        if(!useFileInput) {
-            if(rank == 0) {
+        if (!useFileInput) {
+            if (rank == 0) {
                 // 根据 run 的不同 seed 生成新的随机网格
                 // 这样才是真正 M 次独立的初始条件
-                unsigned int newSeed = (unsigned int)time(NULL) + run*10000;
+                unsigned int newSeed = (unsigned int) time(NULL) + run * 10000;
                 globalGrid = generateRandomGrid(N, p, newSeed);
             }
         }
@@ -368,18 +367,18 @@ int main(int argc, char** argv){
         double globalElapsed = 0.0;
         MPI_Reduce(&elapsed, &globalElapsed, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
-        if(rank == 0) {
-            totalTime   += globalElapsed;
-            totalSteps  += globalSteps;
+        if (rank == 0) {
+            totalTime += globalElapsed;
+            totalSteps += globalSteps;
             fireReachedBottomCount += globalR;
         }
     }
 
     // root 进程输出平均结果
-    if(rank == 0) {
-        double avgTime   = totalTime / M;
-        double avgSteps  = (double)totalSteps / M;
-        double fracReach = (double)fireReachedBottomCount / M;
+    if (rank == 0) {
+        double avgTime = totalTime / M;
+        double avgSteps = (double) totalSteps / M;
+        double fracReach = (double) fireReachedBottomCount / M;
 
         std::cout << "=============================================\n";
         std::cout << "Forest Fire Simulation Results\n";
